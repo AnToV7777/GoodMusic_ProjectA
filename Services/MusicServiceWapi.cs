@@ -97,7 +97,17 @@ public class MusicServiceWapi : IMusicService
     }
     public async Task<IMusicGroup> ReadMusicGroupAsync(Guid id, bool flat)
     {
-        throw new NotImplementedException();
+        string uri = $"musicgroup/Readitem?id={id}&flat={flat}";
+
+        HttpResponseMessage response = await _httpClient.GetAsync(uri);
+
+        response.EnsureSuccessStatusCode();
+
+        string ResponseObject = await response.Content.ReadAsStringAsync();
+
+        var resp = JsonConvert.DeserializeObject<IMusicGroup>(ResponseObject, _jsonSettings);
+
+        return resp;
     }
     public async Task<IMusicGroup> DeleteMusicGroupAsync(Guid id)
     {
