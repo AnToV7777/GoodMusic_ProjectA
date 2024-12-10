@@ -184,6 +184,7 @@ public class MusicServiceWapi : IMusicService
     }
     #endregion
 
+//I'll wait with Artist due to it not being G- level
     #region Artist CRUD 
     public async Task<RespPageDto<IArtist>> ReadArtistsAsync(bool seeded, bool flat, string filter, int pageNumber, int pageSize)
     {
