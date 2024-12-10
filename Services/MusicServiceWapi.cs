@@ -112,10 +112,10 @@ public class MusicServiceWapi : IMusicService
     }
     public async Task<IMusicGroup> DeleteMusicGroupAsync(Guid id)
     {
-        string url = $"MusicGroup/DeleteItem?id={id}";
+        string url = $"MusicGroup/DeleteItem/{id}";
         
-        Console.WriteLine(id.ToString(), url);
-        HttpResponseMessage response = await _httpClient.DeleteAsync(url); response.EnsureSuccessStatusCode();
+        Console.WriteLine($"Requesting DELETE for ID: {id} at URL: {url}");
+        HttpResponseMessage response = await _httpClient.DeleteAsync(url); 
         response.EnsureSuccessStatusCode();
 
         string ResponseObject = await response.Content.ReadAsStringAsync(); 
@@ -125,7 +125,7 @@ public class MusicServiceWapi : IMusicService
     }
     public async Task<IMusicGroup> UpdateMusicGroupAsync(MusicGroupCUdto item)
     {
-        string url = $"MusicGroup/UpdateItem";
+        string url = $"MusicGroup/UpdateItem/{item.MusicGroupId}";
         HttpResponseMessage response = await _httpClient.PutAsJsonAsync(url, item); 
         response.EnsureSuccessStatusCode();
 
@@ -202,23 +202,60 @@ public class MusicServiceWapi : IMusicService
     }
     public async Task<IArtist> ReadArtistAsync(Guid id, bool flat)
     {
-        throw new NotImplementedException();
+        string url = $"artist/read?id={id}&flat={flat}";
+        HttpResponseMessage response = await _httpClient.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+
+        string ResponseObject = await response.Content.ReadAsStringAsync();
+        var resp = JsonConvert.DeserializeObject<IArtist>(ResponseObject, _jsonSettings);
+
+        return resp;
     }
     public async Task<IArtist> DeleteArtistAsync(Guid id)
     {
-        throw new NotImplementedException();
+        string url = $"artist/delete/{id}";
+        HttpResponseMessage response = await _httpClient.DeleteAsync(url); 
+        response.EnsureSuccessStatusCode();
+
+        string ResponseObject = await response.Content.ReadAsStringAsync(); 
+        var resp = JsonConvert.DeserializeObject<IArtist>(ResponseObject, _jsonSettings);
+
+        return resp;
+
     }
     public async Task<IArtist> UpdateArtistAsync(ArtistCUdto item)
     {
-        throw new NotImplementedException();
+        string url = $"artist/update/{item.ArtistId}";
+        HttpResponseMessage response = await _httpClient.PutAsJsonAsync(url, item); 
+        response.EnsureSuccessStatusCode();
+
+        string ResponseObject = await response.Content.ReadAsStringAsync(); 
+        var resp = JsonConvert.DeserializeObject<IArtist>(ResponseObject, _jsonSettings);
+
+        return resp;
     }
     public async Task<IArtist> CreateArtistAsync(ArtistCUdto item)
     {
-        throw new NotImplementedException();
+        string url = $"artist/create";
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(url, item);
+        response.EnsureSuccessStatusCode();
+
+        string ResponseObject = await response.Content.ReadAsStringAsync();
+        var resp = JsonConvert.DeserializeObject<IArtist>(ResponseObject, _jsonSettings);
+
+        return resp;
     }
     public async Task<IArtist> UpsertArtistAsync(ArtistCUdto item)
     {
-        throw new NotImplementedException();
+        string url = $"artist/upsert";
+
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(url, item); 
+        response.EnsureSuccessStatusCode();
+
+        string ResponseObject = await response.Content.ReadAsStringAsync(); 
+        var resp = JsonConvert.DeserializeObject<IArtist>(ResponseObject, _jsonSettings);
+
+        return resp;
     }
     #endregion
     
